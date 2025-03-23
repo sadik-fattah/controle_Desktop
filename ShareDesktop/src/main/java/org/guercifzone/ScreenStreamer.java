@@ -18,7 +18,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class ScreenStreamer {
-    private static Webcam webcam;
+
     private static boolean streaming = false; // Flag to control streamin
     public static void main(String[] args) throws IOException {
         // Create the frame for the buttons
@@ -53,38 +53,11 @@ public class ScreenStreamer {
             }
 
         });
-JButton stratWebcam = new JButton("webcam");
-stratWebcam.addActionListener(e -> {
-    webcam = Webcam.getDefault();
-    if (webcam == null) {
-        System.out.println("No webcam detected");
-        return;
-    }
-    webcam.open();
-    HttpServer server = null;
-    try {
-        server = HttpServer.create(new InetSocketAddress(8080), 0);
-    } catch (IOException ex) {
-        throw new RuntimeException(ex);
-    }
-    server.createContext("/stream", new WebcamStreamServer.WebcamStreamHandler());
-    server.setExecutor(null); // creates a default executor
-    server.start();
 
-    System.out.println("Server started at http://192.168.166.150:8080/stream");
-
-
-});
-
-JButton closeWebcm = new JButton("webcam close");
-closeWebcm.addActionListener(e -> {
-    webcam.close();
-});
         // Add buttons to the frame
         frame.add(startButton);
         frame.add(stopButton);
-        frame.add(stratWebcam);
-        frame.add(closeWebcm);
+
         frame.add(label);
 
         // Set frame size and visibility
@@ -139,36 +112,5 @@ closeWebcm.addActionListener(e -> {
             return null;
         }
     }
-    static class WebcamStreamHandler implements HttpHandler {
-        @Override
-        public void handle(HttpExchange exchange) throws IOException {
-            exchange.getResponseHeaders().set("Content-Type", "multipart/x-mixed-replace; boundary=--myboundary");
-            exchange.sendResponseHeaders(200, 0);
 
-            // Stream webcam frames in MJPEG format
-            while (true) {
-                BufferedImage image = webcam.getImage();
-                if (image != null) {
-                    // Convert image to JPEG byte array
-                    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                    ImageIO.write(image, "JPEG", byteArrayOutputStream);
-                    byte[] imageBytes = byteArrayOutputStream.toByteArray();
-
-                    // Send MJPEG response with boundary markers
-                    String boundary = "--myboundary\r\n";
-                    String header = "Content-Type: image/jpeg\r\nContent-Length: " + imageBytes.length + "\r\n\r\n";
-                    exchange.getResponseBody().write(boundary.getBytes());
-                    exchange.getResponseBody().write(header.getBytes());
-                    exchange.getResponseBody().write(imageBytes);
-                    exchange.getResponseBody().write("\r\n".getBytes());
-                    exchange.getResponseBody().flush();
-                }
-                try {
-                    Thread.sleep(100); // wait for next frame (10 FPS)
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
 }

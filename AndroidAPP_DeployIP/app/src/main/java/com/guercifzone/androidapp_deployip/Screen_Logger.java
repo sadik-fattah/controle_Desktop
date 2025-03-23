@@ -31,7 +31,7 @@ public class Screen_Logger extends AppCompatActivity {
         });
 
         // Initialize WebView
-        webView = findViewById(R.id.webview);
+        webView = findViewById(R.id.webview1);
 
         // Enable JavaScript
         webView.getSettings().setJavaScriptEnabled(true);
@@ -63,7 +63,7 @@ public class Screen_Logger extends AppCompatActivity {
         webView.setWebChromeClient(new WebChromeClient());
 
         // Load the URL (make sure both devices are on the same network)
-        String url = "file:///android_asset/index.html";
+        String url = "file:///android_asset/screen.html";
         webView.loadUrl(url);
 
         // Enable WebView debugging (can inspect WebView via Chrome)

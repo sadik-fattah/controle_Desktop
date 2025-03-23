@@ -18,7 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
 
- Button btnScreen, btnWebCam;
+ Button btnScreen, btnWebCam,btnFolder;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -27,6 +27,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         btnScreen = findViewById(R.id.btn_screen);
         btnWebCam = findViewById(R.id.btn_webcam);
+       btnFolder = findViewById(R.id.btn_folder);
+
 
         btnScreen.setOnClickListener(v -> {
            startActivity(new Intent(MainActivity.this, Screen_Logger.class));
@@ -34,6 +36,10 @@ public class MainActivity extends AppCompatActivity {
         btnWebCam.setOnClickListener(v -> {
             startActivity(new Intent(MainActivity.this, WebCamView.class));
         });
+        btnFolder.setOnClickListener(v -> {
+            startActivity(new Intent(MainActivity.this, FolderShow.class));
+        });
+
         }
     }
 

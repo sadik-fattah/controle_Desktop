@@ -5,9 +5,9 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Screen_Logger">
+    tools:context=".FolderShow">
     <WebView
-        android:id="@+id/webview1"
+        android:id="@+id/webview3"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -18,8 +18,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-public class WebCamView extends AppCompatActivity {
-    private WebView webView2;
+public class FolderShow extends AppCompatActivity {
+    private WebView webView3;
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,40 +32,40 @@ public class WebCamView extends AppCompatActivity {
             return insets;
         });
         // Initialize WebView
-        webView2 = findViewById(R.id.webview2);
+        webView3 = findViewById(R.id.webview3);
 
         // Enable JavaScript
-        webView2.getSettings().setJavaScriptEnabled(true);
+        webView3.getSettings().setJavaScriptEnabled(true);
 
         // Allow Mixed Content (if your server is HTTP instead of HTTPS)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            webView2.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+            webView3.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
         }
 
         // Enable DOM storage
-        webView2.getSettings().setDomStorageEnabled(true);
-        webView2.getSettings().setAllowFileAccess(true);
-        webView2.getSettings().setAllowContentAccess(true);
+        webView3.getSettings().setDomStorageEnabled(true);
+        webView3.getSettings().setAllowFileAccess(true);
+        webView3.getSettings().setAllowContentAccess(true);
 
         // Set WebViewClient to handle internal links in the WebView itself
-        webView2.setWebViewClient(new WebViewClient() {
+        webView3.setWebViewClient(new WebViewClient() {
             @Override
             public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
                 super.onReceivedError(view, request, error);
                 // Log or handle error (e.g., show a Toast)
                 Log.e("WebViewError", "Error: " + error.getDescription());
-                Toast.makeText(WebCamView.this, "Error loading page: " + error.getDescription(), Toast.LENGTH_LONG).show();
+                Toast.makeText(FolderShow.this, "Error loading page: " + error.getDescription(), Toast.LENGTH_LONG).show();
 
             }
 
         });
 
         // Set WebChromeClient to handle JavaScript and page loading events (optional)
-        webView2.setWebChromeClient(new WebChromeClient());
+        webView3.setWebChromeClient(new WebChromeClient());
 
         // Load the URL (make sure both devices are on the same network)
-        String url = "file:///android_asset/webcam.html";
-        webView2.loadUrl(url);
+        String url = "file:///android_asset/folder.html";
+        webView3.loadUrl(url);
 
         // Enable WebView debugging (can inspect WebView via Chrome)
         WebView.setWebContentsDebuggingEnabled(true);
@@ -73,8 +73,8 @@ public class WebCamView extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         // Handle the back button to go back in the WebView history
-        if (webView2.canGoBack()) {
-            webView2.goBack();
+        if (webView3.canGoBack()) {
+            webView3.goBack();
         } else {
             super.onBackPressed();
         }

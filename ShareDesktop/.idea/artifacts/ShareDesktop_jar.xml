@@ -3,6 +3,12 @@
     <output-path>$PROJECT_DIR$/out/artifacts/ShareDesktop_jar</output-path>
     <root id="archive" name="ShareDesktop.jar">
       <element id="module-output" name="ShareDesktop" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apache/mina/mina-core/2.0.16/mina-core-2.0.16.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/github/sarxos/webcam-capture/0.3.10/webcam-capture-0.3.10.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/slf4j/slf4j-api/1.7.2/slf4j-api-1.7.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apache/ftpserver/ftpserver-core/1.1.0/ftpserver-core-1.1.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/nativelibs4java/bridj/0.6.2/bridj-0.6.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apache/ftpserver/ftplet-api/1.1.0/ftplet-api-1.1.0.jar" path-in-jar="/" />
     </root>
   </artifact>
 </component>
