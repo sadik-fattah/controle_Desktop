@@ -3,27 +3,80 @@ package org.guercifzone;
 import com.sun.net.httpserver.HttpServer;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpExchange;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.*;
 import java.net.*;
 import java.nio.file.*;
-import java.nio.file.attribute.BasicFileAttributes;
-import java.util.*;
 
-public class SimpleHTTPServer {
+public class SimpleHTTPServer extends JFrame {
+    private String folderPath = "/home/jknz0/Pictures";
+    private HttpServer server; // Declare server as a class member
 
-    public static void main(String[] args) throws Exception {
-        // Set the folder to be shared
-        String folderPath = "/home/jknz0/Pictures"; // Replace with the folder you want to share
+    public SimpleHTTPServer() {
+        setTitle("Folder Shared");
+        setSize(300, 150);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        // Create an HTTP server on port 8080
-        HttpServer server = HttpServer.create(new InetSocketAddress(8080), 0);
+        Label label = new Label("Click start to run server ");
 
-        // Create a handler that will serve files from the folder
-        server.createContext("/", new FileHandler(folderPath));
+        JButton startButton = new JButton("Start");
+        startButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    // Start the server
+                    if (server == null) { // Check if server is already started
+                        server = HttpServer.create(new InetSocketAddress(8080), 0);
+                        server.createContext("/", new FileHandler(folderPath));
+                        server.start();
+                        System.out.println("HTTP Server started on http://localhost:8080");
+                        label.setText("HTTP Server started on http://localhost:8080");
 
-        // Start the server
-        server.start();
-        System.out.println("HTTP Server started on http://localhost:8080");
+                    } else {
+                        System.out.println("Server is already running.");
+                    }
+                } catch (Exception r) {
+                    r.printStackTrace();
+                }
+            }
+        });
+
+        JButton stopButton = new JButton("Stop");
+        stopButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    if (server != null) {
+                        server.stop(0);  // Stop the server gracefully
+                        System.out.println("HTTP Server stopped.");
+                        label.setText("HTTP Server stopped");
+                    } else {
+                        System.out.println("Server is not running.");
+                    }
+                } catch (Exception r) {
+                    r.printStackTrace();
+                }
+            }
+        });
+
+        add(startButton);
+        add(stopButton);
+        add(label);
+
+        setLayout(new FlowLayout());
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                new SimpleHTTPServer().setVisible(true);
+            }
+        });
     }
 
     // FileHandler class to handle HTTP requests and serve files from the specified folder

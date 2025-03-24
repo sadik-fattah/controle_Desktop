@@ -17,16 +17,14 @@ import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class ScreenStreamer {
+public class ScreenStreamer extends JFrame {
 
-    private static boolean streaming = false; // Flag to control streamin
-    public static void main(String[] args) throws IOException {
-        // Create the frame for the buttons
-        JFrame frame = new JFrame("the server");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLayout(new FlowLayout());
+    private static boolean streaming = false;
+    public ScreenStreamer(){
+       setTitle("Screen Streamer");
+       setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setSize(400, 100);
         Label label = new Label("click start to run server ");
-        // Create Start Button
         JButton startButton = new JButton("Start");
         startButton.addActionListener(new ActionListener() {
             @Override
@@ -35,12 +33,9 @@ public class ScreenStreamer {
                     startStreaming();
                     streaming = true;
                 }
-                label.setText("Server started on port 8080");
+                label.setText("Server started at http://192.168.166.150:8080/");
             }
         });
-        // Create an HTTP server
-
-        // Create Stop Button
         JButton stopButton = new JButton("Stop");
         stopButton.addActionListener(new ActionListener() {
             @Override
@@ -53,16 +48,22 @@ public class ScreenStreamer {
             }
 
         });
+        add(startButton);
+        add(stopButton);
+        add(label);
 
-        // Add buttons to the frame
-        frame.add(startButton);
-        frame.add(stopButton);
+        setLayout(new FlowLayout());
 
-        frame.add(label);
+    }
+    public static void main(String[] args) throws IOException {
 
-        // Set frame size and visibility
-        frame.setSize(300, 100);
-        frame.setVisible(true);
+ SwingUtilities.invokeLater(new Runnable() {
+     @Override
+     public void run() {
+         new ScreenStreamer().setVisible(true);
+     }
+ });
+
     }
 
     private static void startStreaming() {

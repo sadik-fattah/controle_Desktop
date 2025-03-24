@@ -1,40 +1,75 @@
 package org.guercifzone;
 
 import com.github.sarxos.webcam.Webcam;
-import com.github.sarxos.webcam.WebcamException;
 
 import com.sun.net.httpserver.HttpServer;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpExchange;
 
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.ByteArrayOutputStream;
 import java.net.InetSocketAddress;
 
 import javax.imageio.ImageIO;
+import javax.swing.*;
 
-public class WebcamStreamServer {
-
+public class WebcamStreamServer extends JFrame {
     private static Webcam webcam;
+    public  WebcamStreamServer(){
+        setTitle("Screen Streamer");
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setSize(500, 100);
+        Label label = new Label("click start to WebCam ");
+        JButton startButton = new JButton("Start");
+        startButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                webcam = Webcam.getDefault();
+                if (webcam == null) {
+                    System.out.println("No webcam detected");
+                    return;
+                }
+                webcam.open();
+                label.setText("\nServer started at http://192.168.166.150:8080/stream");
+                try {
+                    HttpServer server = HttpServer.create(new InetSocketAddress(8080), 0);
+                    server.createContext("/stream", new WebcamStreamHandler());
+                    server.setExecutor(null); // creates a default executor
+                    server.start();
 
-    public static void main(String[] args) throws Exception {
-        // Initialize the webcam
-        webcam = Webcam.getDefault();
-        if (webcam == null) {
-            System.out.println("No webcam detected");
-            return;
-        }
-        webcam.open();
+                    System.out.println("Server started at http://192.168.166.150:8080/stream");
+                }catch (Exception s){
+                    s.printStackTrace();
+                }
+            }
+        });
+        JButton stopButton = new JButton("Stop");
+        stopButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                webcam.close();
+                label.setText("\nWebCam is close");
+            }
+        });
+        add(startButton);
+        add(stopButton);
+        add(label);
 
-        // Create an HTTP server
-        HttpServer server = HttpServer.create(new InetSocketAddress(8080), 0);
-        server.createContext("/stream", new WebcamStreamHandler());
-        server.setExecutor(null); // creates a default executor
-        server.start();
+        setLayout(new FlowLayout());
+    }
 
-        System.out.println("Server started at http://192.168.166.150:8080/stream");
+
+    public static void main(String[] args)  {
+SwingUtilities.invokeLater(new Runnable() {
+    @Override
+    public void run() {
+        new WebcamStreamServer().setVisible(true);
+    }
+});
     }
 
     static class WebcamStreamHandler implements HttpHandler {
